@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2.22.0
+
+-   Add `<twig:Turbo:Stream>` component
+-   Add `<twig:Turbo:Frame>` component
+
 ## 2.21.0
 
 -   Add `Helper/TurboStream::append()` et al. methods
