@@ -10,6 +10,7 @@
 -   The importmap entry `@symfony/ux-map/abstract-map-controller` can be removed
     from your importmap, it is no longer needed. 
 -   Add `Polygon` support
+-   Add `Polyline` support
 
 ## 2.19
 
