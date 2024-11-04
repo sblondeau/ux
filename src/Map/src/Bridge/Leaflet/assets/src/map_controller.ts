@@ -1,5 +1,5 @@
 import AbstractMapController from '@symfony/ux-map';
-import type { Point, MarkerDefinition, PolygonDefinition PolylineDefinition } from '@symfony/ux-map';
+import type { Point, MarkerDefinition, PolygonDefinition, PolylineDefinition } from '@symfony/ux-map';
 import 'leaflet/dist/leaflet.min.css';
 import * as L from 'leaflet';
 import type { MapOptions as LeafletMapOptions, MarkerOptions, PopupOptions, PolygonOptions , PolylineOptions } from 'leaflet';

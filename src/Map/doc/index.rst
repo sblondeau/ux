@@ -131,7 +131,8 @@ You can add markers to a map using the ``addMarker()`` method::
     ;
 
 Add Polylines
-~~~~~~~~~~~~
+~~~~~~~~~~~~~
+
 You can add Polylines, which represents a path made by a series of `Point` instances
     $myMap->addPolyline(new Polyline(
         points: [

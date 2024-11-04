@@ -38,7 +38,7 @@ export default class extends AbstractMapController<
     google.maps.InfoWindowOptions,
     google.maps.InfoWindow,
     google.maps.PolygonOptions,
-    google.maps.Polygon
+    google.maps.Polygon,
     google.maps.PolylineOptions,
     google.maps.Polyline
 > {
