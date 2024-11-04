@@ -8,13 +8,15 @@ class default_1 extends Controller {
         this.markers = [];
         this.infoWindows = [];
         this.polygons = [];
+        this.polylines = [];
     }
     connect() {
-        const { center, zoom, options, markers, polygons, fitBoundsToMarkers } = this.viewValue;
+        const { center, zoom, options, markers, polygons, polylines, fitBoundsToMarkers } = this.viewValue;
         this.dispatchEvent('pre-connect', { options });
         this.map = this.doCreateMap({ center, zoom, options });
         markers.forEach((marker) => this.createMarker(marker));
         polygons.forEach((polygon) => this.createPolygon(polygon));
+        polylines.forEach((polyline) => this.createPolyline(polyline));
         if (fitBoundsToMarkers) {
             this.doFitBoundsToMarkers();
         }
@@ -22,6 +24,7 @@ class default_1 extends Controller {
             map: this.map,
             markers: this.markers,
             polygons: this.polygons,
+            polylines: this.polylines,
             infoWindows: this.infoWindows,
         });
     }
@@ -39,6 +42,13 @@ class default_1 extends Controller {
         this.polygons.push(polygon);
         return polygon;
     }
+    createPolyline(definition) {
+        this.dispatchEvent('polyline:before-create', { definition });
+        const polyline = this.doCreatePolyline(definition);
+        this.dispatchEvent('polyline:after-create', { polyline });
+        this.polylines.push(polyline);
+        return polyline;
+    }  
     createInfoWindow({ definition, element, }) {
         this.dispatchEvent('info-window:before-create', { definition, element });
         const infoWindow = this.doCreateInfoWindow({ definition, element });
@@ -102,6 +112,17 @@ class map_controller extends default_1 {
             this.createInfoWindow({ definition: infoWindow, element: polygon });
         }
         return polygon;
+    }
+    doCreatePolyline(definition) {
+        const { points, title, infoWindow, rawOptions = {} } = definition;
+        const polyline = L.polyline(points, { ...rawOptions }).addTo(this.map);
+        if (title) {
+            polyline.bindPopup(title);
+        }
+        if (infoWindow) {
+            this.createInfoWindow({ definition: infoWindow, element: polyline });
+        }
+        return polyline;
     }
     doCreateInfoWindow({ definition, element, }) {
         const { headerContent, content, rawOptions = {}, ...otherOptions } = definition;

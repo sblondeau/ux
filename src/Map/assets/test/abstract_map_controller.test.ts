@@ -35,12 +35,24 @@ class MyMapController extends AbstractMapController {
         return polygon;
     }
 
+    doCreatePolyline(definition) {
+        const polyline = { polyline: 'polyline', title: definition.title };
+
+        if (definition.infoWindow) {
+            this.createInfoWindow({ definition: definition.infoWindow, element: polyline });
+        }
+        return polyline;
+    }
+
     doCreateInfoWindow({ definition, element }) {
         if (element.marker) {
             return { infoWindow: 'infoWindow', headerContent: definition.headerContent, marker: element.title };
         }
         if (element.polygon) {
             return { infoWindow: 'infoWindow', headerContent: definition.headerContent, polygon: element.title };
+        }
+        if (element.polyline) {
+            return { infoWindow: 'infoWindow', headerContent: definition.headerContent, polyline: element.title };
         }
     }
 
@@ -113,6 +125,32 @@ describe('AbstractMapController', () => {
                             "autoClose": true
                         }
                     }
+                ],
+                "polylines": [
+                    {
+                        "coordinates": [
+                            { "lat": 48.858844, "lng": 2.294351 },
+                            { "lat": 48.853, "lng": 2.3499 },
+                            { "lat": 48.8566, "lng": 2.3522 }
+                        ],
+                        "title": "Polyline 1",
+                        "infoWindow": null
+                    },
+                    {
+                        "coordinates": [
+                            { "lat": 45.764043, "lng": 4.835659 },
+                            { "lat": 45.750000, "lng": 4.850000 },
+                            { "lat": 45.770000, "lng": 4.820000 }
+                        ],
+                        "title": "Polyline 2",
+                        "infoWindow": {
+                            "headerContent": "<b>Polyline 2</b>",
+                            "content": "A polyline around Lyon with some additional info.",
+                            "position": null,
+                            "opened": false,
+                            "autoClose": true
+                        }
+                    }
                 ]
             }'>
         </div>
@@ -123,7 +161,7 @@ describe('AbstractMapController', () => {
         clearDOM();
     });
 
-    it('connect and create map, marker, polygon and info window', async () => {
+    it('connect and create map, marker, polygon, polyline and info window', async () => {
         const div = getByTestId(container, 'map');
         expect(div).not.toHaveClass('connected');
 
@@ -140,6 +178,10 @@ describe('AbstractMapController', () => {
             { polygon: 'polygon', title: 'Polygon 1' },
             { polygon: 'polygon', title: 'Polygon 2' },
         ]);
+        expect(controller.polylines).toEqual([
+            { polyline: 'polyline', title: 'Polyline 1' },
+            { polyline: 'polyline', title: 'Polyline 2' },
+        ]);
         expect(controller.infoWindows).toEqual([
             {
                 headerContent: '<b>Lyon</b>',
@@ -150,6 +192,11 @@ describe('AbstractMapController', () => {
                 headerContent: '<b>Polygon 2</b>',
                 infoWindow: 'infoWindow',
                 polygon: 'Polygon 2',
+            },
+            {
+                headerContent: '<b>Polyline 2</b>',
+                infoWindow: 'infoWindow',
+                polyline: 'Polyline 2',
             },
         ]);
     });

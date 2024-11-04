@@ -2,12 +2,13 @@ import { Controller } from '@hotwired/stimulus';
 
 export type Point = { lat: number; lng: number };
 
-export type MapView<Options, MarkerOptions, InfoWindowOptions, PolygonOptions> = {
+export type MapView<Options, MarkerOptions, InfoWindowOptions, PolygonOptions, PolylineOptions> = {
     center: Point | null;
     zoom: number | null;
     fitBoundsToMarkers: boolean;
     markers: Array<MarkerDefinition<MarkerOptions, InfoWindowOptions>>;
     polygons: Array<PolygonDefinition<PolygonOptions, InfoWindowOptions>>;
+    polylines: Array<PolylineDefinition<PolylineOptions, InfoWindowOptions>>;
     options: Options;
 };
 
@@ -36,6 +37,14 @@ export type PolygonDefinition<PolygonOptions, InfoWindowOptions> = {
     extra: Record<string, unknown>;
 };
 
+export type PolylineDefinition<PolylineOptions, InfoWindowOptions> = {
+    infoWindow?: Omit<InfoWindowDefinition<InfoWindowOptions>, 'position'>;
+    points: Array<Point>;
+    title: string | null;
+    rawOptions?: PolylineOptions;
+    extra: Record<string, unknown>;
+};
+
 export type InfoWindowDefinition<InfoWindowOptions> = {
     headerContent: string | null;
     content: string | null;
@@ -56,7 +65,7 @@ export type InfoWindowDefinition<InfoWindowOptions> = {
     extra: Record<string, unknown>;
 };
 
-export default abstract class<
+export default abstract class <
     MapOptions,
     Map,
     MarkerOptions,
@@ -65,18 +74,21 @@ export default abstract class<
     InfoWindow,
     PolygonOptions,
     Polygon,
+    PolylineOptions,
+    Polyline,
 > extends Controller<HTMLElement> {
     static values = {
         providerOptions: Object,
         view: Object,
     };
 
-    declare viewValue: MapView<MapOptions, MarkerOptions, InfoWindowOptions, PolygonOptions>;
+    declare viewValue: MapView<MapOptions, MarkerOptions, InfoWindowOptions, PolygonOptions, PolylineOptions>;
 
     protected map: Map;
     protected markers: Array<Marker> = [];
     protected infoWindows: Array<InfoWindow> = [];
     protected polygons: Array<Polygon> = [];
+    protected polylines: Array<Polyline> = [];
 
     connect() {
         const { center, zoom, options, markers, polygons, fitBoundsToMarkers } = this.viewValue;
@@ -89,6 +101,8 @@ export default abstract class<
 
         polygons.forEach((polygon) => this.createPolygon(polygon));
 
+        polylines.forEach((polyline) => this.createPolyline(polyline));
+
         if (fitBoundsToMarkers) {
             this.doFitBoundsToMarkers();
         }
@@ -97,6 +111,7 @@ export default abstract class<
             map: this.map,
             markers: this.markers,
             polygons: this.polygons,
+            polylines: this.polylines,
             infoWindows: this.infoWindows,
         });
     }
@@ -129,17 +144,27 @@ export default abstract class<
         return polygon;
     }
 
+    createPolyline(definition: PolylineDefinition<PolylineOptions, InfoWindowOptions>): Polyline {
+        this.dispatchEvent('polyline:before-create', { definition });
+        const polyline = this.doCreatePolyline(definition);
+        this.dispatchEvent('polyline:after-create', { polyline });
+        this.polylines.push(polyline);
+        return polyline;
+    }
+
     protected abstract doCreateMarker(definition: MarkerDefinition<MarkerOptions, InfoWindowOptions>): Marker;
     protected abstract doCreatePolygon(definition: PolygonDefinition<PolygonOptions, InfoWindowOptions>): Polygon;
+    protected abstract doCreatePolyline(definition: PolylineDefinition<PolylineOptions, InfoWindowOptions>): Polyline;
 
     protected createInfoWindow({
         definition,
         element,
     }: {
         definition:
-            | MarkerDefinition<MarkerOptions, InfoWindowOptions>['infoWindow']
-            | PolygonDefinition<PolygonOptions, InfoWindowOptions>['infoWindow'];
-        element: Marker | Polygon;
+        | MarkerDefinition<MarkerOptions, InfoWindowOptions>['infoWindow']
+        | PolygonDefinition<PolygonOptions, InfoWindowOptions>['infoWindow']
+        | PolylineDefinition<PolylineOptions, InfoWindowOptions>['infoWindow'];
+        element: Marker | Polygon | Polyline;
     }): InfoWindow {
         this.dispatchEvent('info-window:before-create', { definition, element });
         const infoWindow = this.doCreateInfoWindow({ definition, element });
@@ -155,13 +180,17 @@ export default abstract class<
         element,
     }:
         | {
-              definition: MarkerDefinition<MarkerOptions, InfoWindowOptions>['infoWindow'];
-              element: Marker;
-          }
+            definition: MarkerDefinition<MarkerOptions, InfoWindowOptions>['infoWindow'];
+            element: Marker;
+        }
         | {
-              definition: PolygonDefinition<PolygonOptions, InfoWindowOptions>['infoWindow'];
-              element: Polygon;
-          }): InfoWindow;
+            definition: PolygonDefinition<PolygonOptions, InfoWindowOptions>['infoWindow'];
+            element: Polygon;
+        }
+        | {
+            definition: PolylineDefinition<PolylineOptions, InfoWindowOptions>['infoWindow'];
+            element: Polyline;
+        }): InfoWindow;
 
     protected abstract doFitBoundsToMarkers(): void;
 

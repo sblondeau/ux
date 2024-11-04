@@ -8,7 +8,7 @@
  */
 
 import AbstractMapController from '@symfony/ux-map';
-import type { Point, MarkerDefinition, PolygonDefinition } from '@symfony/ux-map';
+import type { Point, MarkerDefinition, PolygonDefinition, PolylineDefinition  } from '@symfony/ux-map';
 import type { LoaderOptions } from '@googlemaps/js-api-loader';
 import { Loader } from '@googlemaps/js-api-loader';
 
@@ -39,6 +39,8 @@ export default class extends AbstractMapController<
     google.maps.InfoWindow,
     google.maps.PolygonOptions,
     google.maps.Polygon
+    google.maps.PolylineOptions,
+    google.maps.Polyline
 > {
     static values = {
         providerOptions: Object,
@@ -153,6 +155,28 @@ export default class extends AbstractMapController<
         return polygon;
     }
 
+    protected doCreatePolyline(
+        definition: PolylineDefinition<google.maps.Polyline, google.maps.InfoWindowOptions>
+    ): google.maps.Polyline {
+        const { points, title, infoWindow, rawOptions = {} } = definition;
+
+        const polyline = new _google.maps.Polyline({
+            ...rawOptions,
+            path: points,
+            map: this.map,
+        });
+
+        if (title) {
+            polyline.set('title', title);
+        }
+
+        if (infoWindow) {
+            this.createInfoWindow({ definition: infoWindow, element: polyline });
+        }
+
+        return polyline;
+    }
+
     protected doCreateInfoWindow({
         definition,
         element,
@@ -162,8 +186,9 @@ export default class extends AbstractMapController<
                   google.maps.marker.AdvancedMarkerElementOptions,
                   google.maps.InfoWindowOptions
               >['infoWindow']
-            | PolygonDefinition<google.maps.Polygon, google.maps.InfoWindowOptions>['infoWindow'];
-        element: google.maps.marker.AdvancedMarkerElement | google.maps.Polygon;
+            | PolygonDefinition<google.maps.Polygon, google.maps.InfoWindowOptions>['infoWindow']
+            | PolylineDefinition<google.maps.Polyline, google.maps.InfoWindowOptions>['infoWindow'];
+        element: google.maps.marker.AdvancedMarkerElement | google.maps.Polygon | google.maps.Polyline;
     }): google.maps.InfoWindow {
         const { headerContent, content, extra, rawOptions = {}, ...otherOptions } = definition;
 
@@ -186,6 +211,23 @@ export default class extends AbstractMapController<
                 infoWindow.open({ map: this.map, anchor: element });
             }
         } else if (element instanceof google.maps.Polygon) {
+            element.addListener('click', (event: any) => {
+                if (definition.autoClose) {
+                    this.closeInfoWindowsExcept(infoWindow);
+                }
+                infoWindow.setPosition(event.latLng);
+                infoWindow.open(this.map);
+            });
+
+            if (definition.opened) {
+                const bounds = new google.maps.LatLngBounds();
+                element.getPath().forEach((point: google.maps.LatLng) => {
+                    bounds.extend(point);
+                });
+                infoWindow.setPosition(bounds.getCenter());
+                infoWindow.open({ map: this.map, anchor: element });
+            }
+        } else if (element instanceof google.maps.Polyline) {
             element.addListener('click', (event: any) => {
                 if (definition.autoClose) {
                     this.closeInfoWindowsExcept(infoWindow);

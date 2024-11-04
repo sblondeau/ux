@@ -1,8 +1,8 @@
 import AbstractMapController from '@symfony/ux-map';
-import type { Point, MarkerDefinition, PolygonDefinition } from '@symfony/ux-map';
+import type { Point, MarkerDefinition, PolygonDefinition PolylineDefinition } from '@symfony/ux-map';
 import 'leaflet/dist/leaflet.min.css';
 import * as L from 'leaflet';
-import type { MapOptions as LeafletMapOptions, MarkerOptions, PopupOptions, PolygonOptions } from 'leaflet';
+import type { MapOptions as LeafletMapOptions, MarkerOptions, PopupOptions, PolygonOptions , PolylineOptions } from 'leaflet';
 
 type MapOptions = Pick<LeafletMapOptions, 'center' | 'zoom'> & {
     tileLayer: { url: string; attribution: string; options: Record<string, unknown> };
@@ -16,7 +16,9 @@ export default class extends AbstractMapController<
     PopupOptions,
     typeof L.Popup,
     PolygonOptions,
-    typeof L.Polygon
+    typeof L.Polygon,
+    PolylineOptions,
+    typeof L.Polyline
 > {
     connect(): void {
         L.Marker.prototype.options.icon = L.divIcon({
@@ -87,12 +89,28 @@ export default class extends AbstractMapController<
         return polygon;
     }
 
+    protected doCreatePolyline(definition: PolylineDefinition): L.Polyline {
+        const { points, title, infoWindow, rawOptions = {} } = definition;
+
+        const polyline = L.polyline(points, { ...rawOptions }).addTo(this.map);
+
+        if (title) {
+            polyline.bindPopup(title);
+        }
+
+        if (infoWindow) {
+            this.createInfoWindow({ definition: infoWindow, element: polyline });
+        }
+
+        return polyline;
+    }
+
     protected doCreateInfoWindow({
         definition,
         element,
     }: {
-        definition: MarkerDefinition['infoWindow'] | PolygonDefinition['infoWindow'];
-        element: L.Marker | L.Polygon;
+        definition: MarkerDefinition['infoWindow'] | PolygonDefinition['infoWindow'] | PolylineDefinition['infoWindow'];
+        element: L.Marker | L.Polygon | L.Polyline;
     }): L.Popup {
         const { headerContent, content, rawOptions = {}, ...otherOptions } = definition;
 

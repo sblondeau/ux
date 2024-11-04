@@ -114,8 +114,20 @@ A map is created by calling ``new Map()``. You can configure the center, zoom, a
                     ),
                 )
             ;
+            // 3. You can also add Polylines, which represents a path made by a series of `Point` instances 
+            $myMap->addPolyline(new Polyline(
+                points: [
+                    new Point(48.8566, 2.3522),
+                    new Point(45.7640, 4.8357),
+                    new Point(43.2965, 5.3698),
+                    new Point(44.8378, -0.5792),
+                ],
+                infoWindow: new InfoWindow(
+                    content: 'A line passing through Paris, Lyon, Marseille, Bordeaux',
+                ),
+            ));
 
-            // 3. You can also add Polygons, which represents an area enclosed by a series of `Point` instances
+            // 4. You can also add Polygons, which represents an area enclosed by a series of `Point` instances
             $myMap->addPolygon(new Polygon(
                 points: [
                     new Point(48.8566, 2.3522),
@@ -124,11 +136,11 @@ A map is created by calling ``new Map()``. You can configure the center, zoom, a
                     new Point(44.8378, -0.5792),
                 ],
                 infoWindow: new InfoWindow(
-                    content: 'Paris, Lyon, Marseille, Bordeaux',
+                    content: 'A polygon enclosed by Paris, Lyon, Marseille, Bordeaux',
                 ),
             ));
 
-            // 4. And inject the map in your template to render it
+            // 5. And inject the map in your template to render it
             return $this->render('contact/index.html.twig', [
                 'my_map' => $myMap,
             ]);

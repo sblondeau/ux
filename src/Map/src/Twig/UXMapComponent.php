@@ -11,9 +11,10 @@
 
 namespace Symfony\UX\Map\Twig;
 
-use Symfony\UX\Map\Marker;
 use Symfony\UX\Map\Point;
+use Symfony\UX\Map\Marker;
 use Symfony\UX\Map\Polygon;
+use Symfony\UX\Map\Polyline;
 
 /**
  * @author Simon André <smn.andre@gmail.com>
@@ -35,4 +36,8 @@ final class UXMapComponent
      * @var Polygon[]
      */
     public array $polygons;
+    /**
+     * @var Polyline[]
+     */
+    public array $polylines;
 }
