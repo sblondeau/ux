@@ -8,7 +8,7 @@
  */
 
 import AbstractMapController from '@symfony/ux-map';
-import type { Point, MarkerDefinition, PolygonDefinition, PolylineDefinition  } from '@symfony/ux-map';
+import type { Point, MarkerDefinition, PolygonDefinition, PolylineDefinition } from '@symfony/ux-map';
 import type { LoaderOptions } from '@googlemaps/js-api-loader';
 import { Loader } from '@googlemaps/js-api-loader';
 

@@ -65,7 +65,7 @@ export type InfoWindowDefinition<InfoWindowOptions> = {
     extra: Record<string, unknown>;
 };
 
-export default abstract class <
+export default abstract class<
     MapOptions,
     Map,
     MarkerOptions,
@@ -161,9 +161,9 @@ export default abstract class <
         element,
     }: {
         definition:
-        | MarkerDefinition<MarkerOptions, InfoWindowOptions>['infoWindow']
-        | PolygonDefinition<PolygonOptions, InfoWindowOptions>['infoWindow']
-        | PolylineDefinition<PolylineOptions, InfoWindowOptions>['infoWindow'];
+            | MarkerDefinition<MarkerOptions, InfoWindowOptions>['infoWindow']
+            | PolygonDefinition<PolygonOptions, InfoWindowOptions>['infoWindow']
+            | PolylineDefinition<PolylineOptions, InfoWindowOptions>['infoWindow'];
         element: Marker | Polygon | Polyline;
     }): InfoWindow {
         this.dispatchEvent('info-window:before-create', { definition, element });
@@ -180,17 +180,17 @@ export default abstract class <
         element,
     }:
         | {
-            definition: MarkerDefinition<MarkerOptions, InfoWindowOptions>['infoWindow'];
-            element: Marker;
-        }
+              definition: MarkerDefinition<MarkerOptions, InfoWindowOptions>['infoWindow'];
+              element: Marker;
+          }
         | {
-            definition: PolygonDefinition<PolygonOptions, InfoWindowOptions>['infoWindow'];
-            element: Polygon;
-        }
+              definition: PolygonDefinition<PolygonOptions, InfoWindowOptions>['infoWindow'];
+              element: Polygon;
+          }
         | {
-            definition: PolylineDefinition<PolylineOptions, InfoWindowOptions>['infoWindow'];
-            element: Polyline;
-        }): InfoWindow;
+              definition: PolylineDefinition<PolylineOptions, InfoWindowOptions>['infoWindow'];
+              element: Polyline;
+          }): InfoWindow;
 
     protected abstract doFitBoundsToMarkers(): void;
 
