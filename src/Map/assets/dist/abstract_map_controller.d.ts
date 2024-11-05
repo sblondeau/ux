@@ -67,7 +67,7 @@ export default abstract class<MapOptions, Map, MarkerOptions, Marker, InfoWindow
     protected abstract doCreatePolyline(definition: PolylineDefinition<PolylineOptions, InfoWindowOptions>): Polyline;
     protected createInfoWindow({ definition, element, }: {
         definition: MarkerDefinition<MarkerOptions, InfoWindowOptions>['infoWindow'] | PolygonDefinition<PolygonOptions, InfoWindowOptions>['infoWindow'] | PolylineDefinition<PolylineOptions, InfoWindowOptions>['infoWindow'];
-        element: Marker | Polygon| Polyline;
+        element: Marker | Polygon | Polyline;
     }): InfoWindow;
     protected abstract doCreateInfoWindow({ definition, element, }: {
         definition: MarkerDefinition<MarkerOptions, InfoWindowOptions>['infoWindow'];
@@ -75,7 +75,7 @@ export default abstract class<MapOptions, Map, MarkerOptions, Marker, InfoWindow
     } | {
         definition: PolygonDefinition<PolygonOptions, InfoWindowOptions>['infoWindow'];
         element: Polygon;
-    }| {
+    } | {
         definition: PolylineDefinition<PolylineOptions, InfoWindowOptions>['infoWindow'];
         element: Polyline;
     }): InfoWindow;

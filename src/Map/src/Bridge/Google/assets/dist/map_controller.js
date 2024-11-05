@@ -10,7 +10,7 @@ let default_1$1 = class default_1 extends Controller {
         this.polylines = [];
     }
     connect() {
-        const { center, zoom, options, markers, polygons, polylines, fitBoundsToMarkers } = this.viewValue;
+        const { center, zoom, options, markers, polygons, fitBoundsToMarkers } = this.viewValue;
         this.dispatchEvent('pre-connect', { options });
         this.map = this.doCreateMap({ center, zoom, options });
         markers.forEach((marker) => this.createMarker(marker));
@@ -120,7 +120,7 @@ class default_1 extends default_1$1 {
         const { points, title, infoWindow, rawOptions = {} } = definition;
         const polygon = new _google.maps.Polygon({
             ...rawOptions,
-            path: points,
+            paths: points,
             map: this.map,
         });
         if (title) {

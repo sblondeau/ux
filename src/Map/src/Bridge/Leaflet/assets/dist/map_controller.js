@@ -11,7 +11,7 @@ class default_1 extends Controller {
         this.polylines = [];
     }
     connect() {
-        const { center, zoom, options, markers, polygons, polylines, fitBoundsToMarkers } = this.viewValue;
+        const { center, zoom, options, markers, polygons, fitBoundsToMarkers } = this.viewValue;
         this.dispatchEvent('pre-connect', { options });
         this.map = this.doCreateMap({ center, zoom, options });
         markers.forEach((marker) => this.createMarker(marker));
@@ -48,7 +48,7 @@ class default_1 extends Controller {
         this.dispatchEvent('polyline:after-create', { polyline });
         this.polylines.push(polyline);
         return polyline;
-    }  
+    }
     createInfoWindow({ definition, element, }) {
         this.dispatchEvent('info-window:before-create', { definition, element });
         const infoWindow = this.doCreateInfoWindow({ definition, element });

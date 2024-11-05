@@ -9,7 +9,7 @@ class default_1 extends Controller {
         this.polylines = [];
     }
     connect() {
-        const { center, zoom, options, markers, polygons, polylines, fitBoundsToMarkers } = this.viewValue;
+        const { center, zoom, options, markers, polygons, fitBoundsToMarkers } = this.viewValue;
         this.dispatchEvent('pre-connect', { options });
         this.map = this.doCreateMap({ center, zoom, options });
         markers.forEach((marker) => this.createMarker(marker));
