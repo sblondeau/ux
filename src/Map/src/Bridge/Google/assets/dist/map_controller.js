@@ -10,7 +10,7 @@ let default_1$1 = class default_1 extends Controller {
         this.polylines = [];
     }
     connect() {
-        const { center, zoom, options, markers, polygons, fitBoundsToMarkers } = this.viewValue;
+        const { center, zoom, options, markers, polygons, polylines, fitBoundsToMarkers } = this.viewValue;
         this.dispatchEvent('pre-connect', { options });
         this.map = this.doCreateMap({ center, zoom, options });
         markers.forEach((marker) => this.createMarker(marker));
@@ -48,7 +48,8 @@ let default_1$1 = class default_1 extends Controller {
         this.polylines.push(polyline);
         return polyline;
     }
-    createInfoWindow({ definition, element, }) {
+    createInfoWindow(args) {
+        const { definition, element } = args;
         this.dispatchEvent('info-window:before-create', { definition, element });
         const infoWindow = this.doCreateInfoWindow({ definition, element });
         this.dispatchEvent('info-window:after-create', { infoWindow, element });
@@ -165,24 +166,7 @@ class default_1 extends default_1$1 {
                 infoWindow.open({ map: this.map, anchor: element });
             }
         }
-        else if (element instanceof google.maps.Polygon) {
-            element.addListener('click', (event) => {
-                if (definition.autoClose) {
-                    this.closeInfoWindowsExcept(infoWindow);
-                }
-                infoWindow.setPosition(event.latLng);
-                infoWindow.open(this.map);
-            });
-            if (definition.opened) {
-                const bounds = new google.maps.LatLngBounds();
-                element.getPath().forEach((point) => {
-                    bounds.extend(point);
-                });
-                infoWindow.setPosition(bounds.getCenter());
-                infoWindow.open({ map: this.map, anchor: element });
-            }
-        }
-        else if (element instanceof google.maps.Polyline) {
+        else if (element instanceof google.maps.Polygon || element instanceof google.maps.Polyline) {
             element.addListener('click', (event) => {
                 if (definition.autoClose) {
                     this.closeInfoWindowsExcept(infoWindow);

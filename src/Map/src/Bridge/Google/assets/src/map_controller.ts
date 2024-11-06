@@ -210,24 +210,7 @@ export default class extends AbstractMapController<
             if (definition.opened) {
                 infoWindow.open({ map: this.map, anchor: element });
             }
-        } else if (element instanceof google.maps.Polygon) {
-            element.addListener('click', (event: any) => {
-                if (definition.autoClose) {
-                    this.closeInfoWindowsExcept(infoWindow);
-                }
-                infoWindow.setPosition(event.latLng);
-                infoWindow.open(this.map);
-            });
-
-            if (definition.opened) {
-                const bounds = new google.maps.LatLngBounds();
-                element.getPath().forEach((point: google.maps.LatLng) => {
-                    bounds.extend(point);
-                });
-                infoWindow.setPosition(bounds.getCenter());
-                infoWindow.open({ map: this.map, anchor: element });
-            }
-        } else if (element instanceof google.maps.Polyline) {
+        } else if (element instanceof google.maps.Polygon || element instanceof google.maps.Polyline) {
             element.addListener('click', (event: any) => {
                 if (definition.autoClose) {
                     this.closeInfoWindowsExcept(infoWindow);

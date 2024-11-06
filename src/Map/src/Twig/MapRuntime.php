@@ -76,7 +76,7 @@ final class MapRuntime implements RuntimeExtensionInterface
 
     public function render(array $args = []): string
     {
-        $map = array_intersect_key($args, ['map' => 0, 'markers' => 0, 'polygons' => 0, 'polylines' => 0, 'center' => 1, 'zoom' => 2]);
+        $map = array_intersect_key($args, ['map' => 0, 'markers' => 1, 'polygons' => 2, 'polylines' => 3, 'center' => 4, 'zoom' => 5]);
         $attributes = array_diff_key($args, $map);
 
         return $this->renderMap(...$map, attributes: $attributes);

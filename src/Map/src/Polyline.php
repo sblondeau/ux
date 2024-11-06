@@ -16,7 +16,7 @@ use Symfony\UX\Map\Exception\InvalidArgumentException;
 /**
  * Represents a polyline on a map.
  *
- * @author [Pierre Svgnt]
+ * @author [Sylvain Blondeau]
  */
 final readonly class Polyline
 {
@@ -33,6 +33,12 @@ final readonly class Polyline
 
     /**
      * Convert the polyline to an array representation.
+     * @return array{
+     *     points: array<array{lat: float, lng: float}>,
+     *     title: string|null,
+     *     infoWindow: array<string, mixed>|null,
+     *     extra: object,
+     * }
      */
     public function toArray(): array
     {

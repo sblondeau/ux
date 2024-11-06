@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 2.22
+
+-   Add `Polyline` support
+
 ## 2.20
 
 -   Deprecate `render_map` Twig function (will be removed in 2.21). Use 
@@ -10,7 +14,6 @@
 -   The importmap entry `@symfony/ux-map/abstract-map-controller` can be removed
     from your importmap, it is no longer needed. 
 -   Add `Polygon` support
--   Add `Polyline` support
 
 ## 2.19
 

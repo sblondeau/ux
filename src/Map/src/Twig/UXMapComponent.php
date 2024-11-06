@@ -11,8 +11,8 @@
 
 namespace Symfony\UX\Map\Twig;
 
-use Symfony\UX\Map\Point;
 use Symfony\UX\Map\Marker;
+use Symfony\UX\Map\Point;
 use Symfony\UX\Map\Polygon;
 use Symfony\UX\Map\Polyline;
 

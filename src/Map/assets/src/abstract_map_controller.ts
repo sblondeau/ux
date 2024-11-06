@@ -91,7 +91,7 @@ export default abstract class<
     protected polylines: Array<Polyline> = [];
 
     connect() {
-        const { center, zoom, options, markers, polygons, fitBoundsToMarkers } = this.viewValue;
+        const { center, zoom, options, markers, polygons, polylines, fitBoundsToMarkers } = this.viewValue;
 
         this.dispatchEvent('pre-connect', { options });
 
@@ -156,16 +156,22 @@ export default abstract class<
     protected abstract doCreatePolygon(definition: PolygonDefinition<PolygonOptions, InfoWindowOptions>): Polygon;
     protected abstract doCreatePolyline(definition: PolylineDefinition<PolylineOptions, InfoWindowOptions>): Polyline;
 
-    protected createInfoWindow({
-        definition,
-        element,
-    }: {
-        definition:
-            | MarkerDefinition<MarkerOptions, InfoWindowOptions>['infoWindow']
-            | PolygonDefinition<PolygonOptions, InfoWindowOptions>['infoWindow']
-            | PolylineDefinition<PolylineOptions, InfoWindowOptions>['infoWindow'];
-        element: Marker | Polygon | Polyline;
-    }): InfoWindow {
+    protected abstract createInfoWindow(
+        args:
+            | {
+                  definition: MarkerDefinition<MarkerOptions, InfoWindowOptions>['infoWindow'];
+                  element: Marker;
+              }
+            | {
+                  definition: PolygonDefinition<PolygonOptions, InfoWindowOptions>['infoWindow'];
+                  element: Polygon;
+              }
+            | {
+                  definition: PolylineDefinition<PolylineOptions, InfoWindowOptions>['infoWindow'];
+                  element: Polyline;
+              }
+    ): InfoWindow {
+        const { definition, element } = args;
         this.dispatchEvent('info-window:before-create', { definition, element });
         const infoWindow = this.doCreateInfoWindow({ definition, element });
         this.dispatchEvent('info-window:after-create', { infoWindow, element });
@@ -175,22 +181,21 @@ export default abstract class<
         return infoWindow;
     }
 
-    protected abstract doCreateInfoWindow({
-        definition,
-        element,
-    }:
-        | {
-              definition: MarkerDefinition<MarkerOptions, InfoWindowOptions>['infoWindow'];
-              element: Marker;
-          }
-        | {
-              definition: PolygonDefinition<PolygonOptions, InfoWindowOptions>['infoWindow'];
-              element: Polygon;
-          }
-        | {
-              definition: PolylineDefinition<PolylineOptions, InfoWindowOptions>['infoWindow'];
-              element: Polyline;
-          }): InfoWindow;
+    protected abstract doCreateInfoWindow(
+        args:
+            | {
+                  definition: MarkerDefinition<MarkerOptions, InfoWindowOptions>['infoWindow'];
+                  element: Marker;
+              }
+            | {
+                  definition: PolygonDefinition<PolygonOptions, InfoWindowOptions>['infoWindow'];
+                  element: Polygon;
+              }
+            | {
+                  definition: PolylineDefinition<PolylineOptions, InfoWindowOptions>['infoWindow'];
+                  element: Polyline;
+              }
+    ): InfoWindow;
 
     protected abstract doFitBoundsToMarkers(): void;
 
