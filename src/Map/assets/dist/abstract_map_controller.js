@@ -47,8 +47,7 @@ class default_1 extends Controller {
         this.polylines.push(polyline);
         return polyline;
     }
-    createInfoWindow(args) {
-        const { definition, element } = args;
+    createInfoWindow({ definition, element, }) {
         this.dispatchEvent('info-window:before-create', { definition, element });
         const infoWindow = this.doCreateInfoWindow({ definition, element });
         this.dispatchEvent('info-window:after-create', { infoWindow, element });
