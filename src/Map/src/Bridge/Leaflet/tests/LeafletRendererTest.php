@@ -49,5 +49,3 @@ class LeafletRendererTest extends RendererTestCase
         ];
     }
 }
-
-

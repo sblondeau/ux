@@ -36,7 +36,7 @@ final class UXMapComponent
      * @var Polygon[]
      */
     public array $polygons;
-    
+
     /**
      * @var Polyline[]
      */

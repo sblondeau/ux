@@ -189,8 +189,8 @@ export default abstract class<
               element: Polygon;
           }
         | {
-                definition: PolylineDefinition<PolylineOptions, InfoWindowOptions>['infoWindow'];
-                element: Polyline;
+              definition: PolylineDefinition<PolylineOptions, InfoWindowOptions>['infoWindow'];
+              element: Polyline;
           }): InfoWindow;
 
     protected abstract doFitBoundsToMarkers(): void;

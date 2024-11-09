@@ -33,6 +33,7 @@ final readonly class Polyline
 
     /**
      * Convert the polyline to an array representation.
+     *
      * @return array{
      *     points: array<array{lat: float, lng: float}>,
      *     title: string|null,
