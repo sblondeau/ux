@@ -98,6 +98,7 @@ final class Map
 
         return $this;
     }
+    
     public function addPolyline(Polyline $polyline): self
     {
         $this->polylines[] = $polyline;
