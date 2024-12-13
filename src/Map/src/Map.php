@@ -40,8 +40,7 @@ final class Map
          * @var array<Polyline>
          */
         private array $polylines = [],
-    ) {
-    }
+    ) {}
 
     public function getRendererName(): ?string
     {
@@ -93,6 +92,13 @@ final class Map
         return $this;
     }
 
+    public function setMarkers(array $markers): self
+    {
+        $this->markers = $markers;
+
+        return $this;
+    }
+
     public function addPolygon(Polygon $polygon): self
     {
         $this->polygons[] = $polygon;
@@ -124,9 +130,9 @@ final class Map
             'zoom' => $this->zoom,
             'fitBoundsToMarkers' => $this->fitBoundsToMarkers,
             'options' => $this->options ? MapOptionsNormalizer::normalize($this->options) : [],
-            'markers' => array_map(static fn (Marker $marker) => $marker->toArray(), $this->markers),
-            'polygons' => array_map(static fn (Polygon $polygon) => $polygon->toArray(), $this->polygons),
-            'polylines' => array_map(static fn (Polyline $polyline) => $polyline->toArray(), $this->polylines),
+            'markers' => array_map(static fn(Marker $marker) => $marker->toArray(), $this->markers),
+            'polygons' => array_map(static fn(Polygon $polygon) => $polygon->toArray(), $this->polygons),
+            'polylines' => array_map(static fn(Polyline $polyline) => $polyline->toArray(), $this->polylines),
         ];
     }
 
