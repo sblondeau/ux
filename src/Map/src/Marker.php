@@ -25,10 +25,11 @@ final readonly class Marker
      *                                    use them later JavaScript side
      */
     public function __construct(
-        private Point $position,
-        private ?string $title = null,
-        private ?InfoWindow $infoWindow = null,
-        private array $extra = [],
+        public Point $position,
+        public ?string $title = null,
+        public ?InfoWindow $infoWindow = null,
+        public array $extra = [],
+        public ?string $identifier = null,
     ) {
     }
 
@@ -38,6 +39,7 @@ final readonly class Marker
      *     title: string|null,
      *     infoWindow: array<string, mixed>|null,
      *     extra: array,
+     *     identifier: string|null
      * }
      */
     public function toArray(): array
@@ -47,6 +49,7 @@ final readonly class Marker
             'title' => $this->title,
             'infoWindow' => $this->infoWindow?->toArray(),
             'extra' => $this->extra,
+            'identifier' => $this->identifier,
         ];
     }
 
@@ -56,6 +59,7 @@ final readonly class Marker
      *     title: string|null,
      *     infoWindow: array<string, mixed>|null,
      *     extra: array,
+     *     identifier: string|null
      * } $marker
      *
      * @internal

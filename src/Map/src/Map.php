@@ -88,8 +88,25 @@ final class Map
 
     public function addMarker(Marker $marker): self
     {
+        foreach($this->markers as $currentMarker) {
+            if($marker->identifier !== null && $currentMarker->identifier === $marker->identifier) {
+                throw new InvalidArgumentException('Each marker should have a unique identifier');
+            }
+        }
+
         $this->markers[] = $marker;
 
+        return $this;
+    }
+
+    public function removeMarker(string $identifier): self
+    {
+        $this->markers = array_filter(
+            $this->markers,
+            fn($marker) => $marker->identifier !== $identifier
+        );
+    
+        sort($this->markers);
         return $this;
     }
 
