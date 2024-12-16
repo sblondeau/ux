@@ -1,5 +1,8 @@
 # CHANGELOG
- 
+
+## 2.23
+-   Add method `Symfony\UX\Map::removeMarker()`, to allow removal of a marker with an identifier
+
 ## 2.22
 
 -   Add method `Symfony\UX\Map\Renderer\AbstractRenderer::tapOptions()`, to allow Renderer to modify options before rendering a Map.
